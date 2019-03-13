@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System.IO;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace FutureNNAimbot
@@ -29,8 +30,10 @@ namespace FutureNNAimbot
                 return;
             }
 
-            System.IO.Directory.CreateDirectory("img/");
-
+            Directory.CreateDirectory("img/");
+            if (!File.Exists("img/classes.txt"))
+                File.WriteAllText("img/classes.txt", string.Join("\n", nNet.TrainingNames));
+            
             new Thread(() =>
             {
                 Thread.CurrentThread.IsBackground = true;

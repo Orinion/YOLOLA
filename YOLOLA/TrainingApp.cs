@@ -53,24 +53,28 @@ namespace FutureNNAimbot
                 {
                     foreach (var item in items)
                     {
-                        if (text.Length > 0)
-                            text += "\n";
+                        int iType = Array.IndexOf<string>(objectNames, item.Type);
 
-                        string type = item.Type;
                         if (settings.ScreenshotMode == ScreenshotModes.AllSelectedType)
-                            type = objectNames[settings.selectedObject];
+                            iType = settings.selectedObject;
 
-                        float x = item.X, y = item.Y;
-                        float w = item.Width, h = item.Height;
+                        float sx = settings.SizeX, sy = settings.SizeY;
+                        float x = item.X / sx, y = item.Y / sy;
+                        float w = item.Width / sx, h = item.Height / sy;
 
-                        text += string.Format("{0} {1} {2} {3} {4}", type, x, y, w, h).Replace(",", ".");
+                        x += w / 2;
+                        y += h / 2;
+
+                        text += string.Format("{0} {1} {2} {3} {4}", iType, x, y, w, h);
+                        text = text.Replace(",", ".");
+                        text += "\n";
                     }
                 }
                 int rand = random.Next(5000, 999999);
                 gc.saveCapture(true, $"img/{settings.Game}{rand}.png");
                 File.WriteAllText($"img/{settings.Game}{rand}.txt", text);
-    
-                //Console.Beep();
+                Console.WriteLine($"saved {rand}");
+                Console.Beep(370,100);
             }
 
         }
